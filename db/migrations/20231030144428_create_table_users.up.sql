@@ -1,6 +1,7 @@
 create table users
 (
     id         varchar(100) not null,
+    email      varchar(100) not null unique,
     name       varchar(100) not null,
     password   varchar(100) not null,
     token      varchar(100) null,
