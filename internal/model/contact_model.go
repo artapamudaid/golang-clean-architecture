@@ -12,6 +12,7 @@ type ContactResponse struct {
 }
 
 type CreateContactRequest struct {
+	ID        string `json:"id"`
 	UserId    string `json:"-" validate:"required"`
 	FirstName string `json:"first_name" validate:"required,max=100"`
 	LastName  string `json:"last_name" validate:"max=100"`

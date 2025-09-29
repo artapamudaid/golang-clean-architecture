@@ -69,16 +69,8 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.ErrBadRequest
 	}
 
-	total, err := c.UserRepository.CountById(tx, request.ID)
-	if err != nil {
-		c.Log.Warnf("Failed count user from database : %+v", err)
-		return nil, fiber.ErrInternalServerError
-	}
-
-	if total > 0 {
-		c.Log.Warnf("User already exists : %+v", err)
-		return nil, fiber.ErrConflict
-	}
+	// Generate new UUID for user ID
+	userId := uuid.New().String()
 
 	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -86,8 +78,16 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.ErrInternalServerError
 	}
 
+	// Check if email already exists
+	existingUser := new(entity.User)
+	if err := c.UserRepository.FindByEmail(tx, existingUser, request.Email); err == nil {
+		c.Log.Warnf("Email already exists: %s", request.Email)
+		return nil, fiber.ErrConflict
+	}
+
 	user := &entity.User{
-		ID:       request.ID,
+		ID:       userId,
+		Email:    request.Email,
 		Password: string(password),
 		Name:     request.Name,
 	}
@@ -126,8 +126,8 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 	}
 
 	user := new(entity.User)
-	if err := c.UserRepository.FindById(tx, user, request.ID); err != nil {
-		c.Log.Warnf("Failed find user by id : %+v", err)
+	if err := c.UserRepository.FindByEmail(tx, user, request.Email); err != nil {
+		c.Log.Warnf("Failed find user by email : %+v", err)
 		return nil, fiber.ErrUnauthorized
 	}
 
@@ -238,6 +238,18 @@ func (c *UserUseCase) Update(ctx context.Context, request *model.UpdateUserReque
 	if err := c.UserRepository.FindById(tx, user, request.ID); err != nil {
 		c.Log.Warnf("Failed find user by id : %+v", err)
 		return nil, fiber.ErrNotFound
+	}
+
+	// Check if email already exists (only if email is being updated)
+	if request.Email != "" {
+		existingUser := new(entity.User)
+		if err := c.UserRepository.FindByEmail(tx, existingUser, request.Email); err == nil {
+			if existingUser.ID != user.ID {
+				c.Log.Warnf("Email already exists: %s", request.Email)
+				return nil, fiber.ErrConflict
+			}
+		}
+		user.Email = request.Email
 	}
 
 	if request.Name != "" {

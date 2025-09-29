@@ -3,6 +3,7 @@ package entity
 // User is a struct that represents a user entity
 type User struct {
 	ID        string    `gorm:"column:id;primaryKey"`
+	Email     string    `gorm:"column:email;uniqueIndex"`
 	Password  string    `gorm:"column:password"`
 	Name      string    `gorm:"column:name"`
 	Token     string    `gorm:"column:token"`

@@ -27,3 +27,7 @@ func (r *Repository[T]) CountById(db *gorm.DB, id any) (int64, error) {
 func (r *Repository[T]) FindById(db *gorm.DB, entity *T, id any) error {
 	return db.Where("id = ?", id).Take(entity).Error
 }
+
+func (r *Repository[T]) FindByEmail(db *gorm.DB, entity *T, email string) error {
+	return db.Where("email = ?", email).First(entity).Error
+}
