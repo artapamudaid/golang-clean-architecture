@@ -2,7 +2,7 @@
 
 ## Description
 
-This is golang clean architecture template.
+This is golang clean architecture template. I have modified it by myself.
 
 ## Architecture
 
@@ -61,12 +61,6 @@ migrate -database "mysql://root:@tcp(localhost:3306)/golang_clean_architecture?c
 ```
 
 ## Run Application
-
-### Run unit test
-
-```bash
-go test -v ./test/
-```
 
 ### Run web server
 
