@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "go-app"
+  },
+  "web": {
+    "prefork": false,
+    "port": 3030
+  },
+  "log": {
+    "level": 6
+  },
+  "database": {
+    "username": "root",
+    "password": "@WebDev25",
+    "host": "localhost",
+    "port": 3306,
+    "name": "go_clean_arch_db",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
+  },
+  "kafka": {
+    "bootstrap": {
+      "servers": "localhost:9092"
+    },
+    "group": {
+      "id": "go-app"
+    },
+    "auto": {
+      "offset": {
+        "reset": "earliest"
+      }
+    },
+    "producer": {
+      "enabled": false
+    }
+  }
+}
