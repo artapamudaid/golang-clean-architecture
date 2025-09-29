@@ -7,6 +7,7 @@ import (
 	"golang-clean-architecture/internal/model"
 	"golang-clean-architecture/internal/model/converter"
 	"golang-clean-architecture/internal/repository"
+	"golang-clean-architecture/internal/util/helper"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -136,7 +137,14 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 		return nil, fiber.ErrUnauthorized
 	}
 
-	user.Token = uuid.New().String()
+	// Replace UUID token generation with JWT
+	token, err := helper.GenerateToken(user.ID, user.Email)
+	if err != nil {
+		c.Log.Warnf("Failed to generate JWT token : %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+	user.Token = token
+
 	if err := c.UserRepository.Update(tx, user); err != nil {
 		c.Log.Warnf("Failed save user : %+v", err)
 		return nil, fiber.ErrInternalServerError

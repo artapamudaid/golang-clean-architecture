@@ -21,6 +21,11 @@
       "lifetime": 300
     }
   },
+  "jwt": {
+    "key":"LyetkM9LkeWfJEVkxCiaHtLjMAz9D0Ee",
+    "issuer": "go-app",
+    "expiration_hours": 24
+  },
   "kafka": {
     "bootstrap": {
       "servers": "localhost:9092"
