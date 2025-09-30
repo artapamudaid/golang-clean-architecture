@@ -15,9 +15,9 @@ type JWTClaims struct {
 }
 
 var (
-	JWT_SECRET           = []byte(viper.GetString("jwt.key"))
-	JWT_ISSUER           = viper.GetString("jwt.issuer")
-	JWT_EXPIRATION_HOURS = viper.GetInt("jwt.expiration_hours")
+	JWT_SECRET           = []byte(viper.GetString("JWT_SECRET"))
+	JWT_ISSUER           = viper.GetString("JWT_ISSUER")
+	JWT_EXPIRATION_HOURS = viper.GetInt("JWT_EXPIRATION_HOURS")
 )
 
 func GenerateToken(userID string, email string) (string, error) {
