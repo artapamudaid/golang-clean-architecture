@@ -22,7 +22,6 @@ func (c *RouteConfig) Setup() {
 func (c *RouteConfig) SetupGuestRoute() {
 	c.App.Post("/api/users", c.UserController.Register)
 	c.App.Post("/api/users/_login", c.UserController.Login)
-	c.App.Post("/api/users/_refresh", c.UserController.Refresh)
 }
 
 func (c *RouteConfig) SetupAuthRoute() {
@@ -30,6 +29,7 @@ func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Delete("/api/users", c.UserController.Logout)
 	c.App.Patch("/api/users/_current", c.UserController.Update)
 	c.App.Get("/api/users/_current", c.UserController.Current)
+	c.App.Post("/api/users/_refresh", c.UserController.Refresh)
 
 	c.App.Get("/api/contacts", c.ContactController.List)
 	c.App.Post("/api/contacts", c.ContactController.Create)
