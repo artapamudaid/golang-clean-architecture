@@ -252,12 +252,15 @@ func (c *UserUseCase) Refresh(ctx context.Context, refreshToken string) (*model.
 		}
 	}
 
+	expiresIn := int64(helper.JWT_EXPIRATION_HOURS * 3600)
+
 	// Return token baru
 	return &model.UserResponse{
-		ID:    user.ID,
-		Email: user.Email,
-		Name:  user.Name,
-		Token: accessToken,
+		ID:        user.ID,
+		Email:     user.Email,
+		Name:      user.Name,
+		Token:     accessToken,
+		ExpiresIn: expiresIn,
 	}, nil
 }
 
