@@ -5,6 +5,7 @@ type UserResponse struct {
 	Email     string `json:"email,omitempty"`
 	Name      string `json:"name,omitempty"`
 	Token     string `json:"token,omitempty"`
+	ExpiresIn int64  `json:"expires_in,omitempty"`
 	CreatedAt int64  `json:"created_at,omitempty"`
 	UpdatedAt int64  `json:"updated_at,omitempty"`
 }

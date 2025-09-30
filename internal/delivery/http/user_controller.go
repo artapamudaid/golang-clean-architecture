@@ -55,6 +55,29 @@ func (c *UserController) Login(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[*model.UserResponse]{Data: response})
 }
 
+func (c *UserController) Refresh(ctx *fiber.Ctx) error {
+	request := new(model.VerifyUserRequest)
+	err := ctx.BodyParser(request)
+	if err != nil {
+		c.Log.Warnf("Failed to parse refresh request : %+v", err)
+		return fiber.ErrBadRequest
+	}
+
+	if request.Token == "" {
+		return fiber.NewError(fiber.StatusBadRequest, " token required")
+	}
+
+	// Panggil usecase Refresh
+	response, err := c.UseCase.Refresh(ctx.UserContext(), request.Token)
+	if err != nil {
+		c.Log.Warnf("Failed to refresh token : %+v", err)
+		return err
+	}
+
+	// Balikkan response ke client
+	return ctx.JSON(model.WebResponse[*model.UserResponse]{Data: response})
+}
+
 func (c *UserController) Current(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
 
